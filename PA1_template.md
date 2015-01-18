@@ -8,7 +8,7 @@ output:
 
 ## Loading and preprocessing the data
 
-1. Loading the data
+- Loading the data
 
 
 ```r
@@ -30,7 +30,7 @@ head(act)
 
 ## What is mean total number of steps taken per day?
 
-1. Histogram of the total number of steps taken each day
+- Histogram of the total number of steps taken each day
 
 
 ```r
@@ -39,7 +39,7 @@ hist(act$steps)
 
 ![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
 
-2. **Mean** and **median** total number of steps taken per day
+- **Mean** and **median** total number of steps taken per day
 
 
 ```r
@@ -61,7 +61,7 @@ median(act$steps, na.rm = TRUE)
 
 ## What is the average daily activity pattern?
 
-1. Time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+- Time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
 
 ```r
@@ -72,7 +72,7 @@ plot(actagg$interval, actagg$steps, type="l")
 
 ![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 
 
-2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+- Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
 
 ```r
@@ -87,7 +87,7 @@ actagg[actagg$steps==max(actagg$steps),]
 
 ## Imputing missing values
 
-1. Calculate and report the total number of missing values in the dataset
+- Calculate and report the total number of missing values in the dataset
 
 
 ```r
@@ -98,31 +98,26 @@ dim(act[is.na(act$steps),])[1]
 ## [1] 2304
 ```
 
-2. Devise a strategy for filling in all of the missing values in the dataset
+- Devise a strategy for filling in all of the missing values in the dataset
 
   The strategy chosen to fill the missing values in the dataset is to include the
   mean value for the 5-minute interval already calculated
   in the `actagg` valiable
   
-3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
+- Create a new dataset that is equal to the original dataset but with the missing data filled in.
 
 
 
 ```r
 nact<-act
-#count<-0
-#nact<-sapply(act[is.na(act$steps),], 1, function(x) actagg$steps)
 for(i in 1:nrow(nact)) {
   if(is.na(nact[i,1])) { 
-    #nact[i,1] <- actagg$steps[nact[i,3]]
     nact[i,1] <- actagg$steps[actagg$interval==nact[i,3]]
-    #print(nact[i,3])
   }
 }
-#count
 ```
 
-4. Make a histogram of the total number of steps taken each day
+- Make a histogram of the total number of steps taken each day
 
 
 ```r
@@ -131,7 +126,7 @@ hist(nact$steps)
 
 ![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png) 
 
-4. Calculate and report the mean and median total number of steps taken per day
+- Calculate and report the mean and median total number of steps taken per day
 
 
 ```r
@@ -150,7 +145,7 @@ median(nact$steps)
 ## [1] 0
 ```
 
-4. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+- Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
   Based on the mean and median calculated above, we conclude that the mean and median have not changed from the initial dataset.
   
@@ -175,19 +170,14 @@ sum(nact$steps, na.rm = TRUE)
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-1. Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
+- Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
 
 
 ```r
-#library(dplyr)
-#Sys.setlocale("LC_TIME", "en_US")
 nact$weekday <- weekdays(as.Date(nact$date))
 nact$wd <- as.POSIXlt(nact$date)$wday
 # 0 - sunday, #6 - saturday
 nact$daytype <- NULL
-#nact$daytype <- function(x) {
-#  if(nact$wd %in% c(0,6)) { "weekend" } else { "weekday" }
-#}
 for(i in 1:nrow(nact)) {
   if(nact$wd[i] %in% c(0,6)) {
     nact$daytype[i] <- "weekend"
@@ -201,7 +191,7 @@ nactagg<-aggregate(nact$steps, by=list(nact$interval, nact$daytype), FUN=mean, n
 names(nactagg)<-c('interval','daytype','steps')
 ```
 
-2. Make a panel plot containing a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
+- Make a panel plot containing a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 
 
 ```r
